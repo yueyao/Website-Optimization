@@ -4,6 +4,26 @@
 
 开始前，请导出这个代码库并检查代码。
 
+
+
+## step up
+
+```
+npm install
+
+//启动本地服务
+npm run serve
+
+// 构建
+npm run serve:dist
+ 
+// 开启ngrok服务 查看给予的url ，测试pagespeed指标 （本地文件是 pageSpeed.html)
+npm run pagespeed
+
+
+```
+
+
 ### 指南
 
 ####Part 1: 优化 index.html 的 PageSpeed Insights 得分
@@ -55,3 +75,4 @@
 
 * <a href="http://getbootstrap.com/css/">Bootstrap CSS</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap组件</a>
+

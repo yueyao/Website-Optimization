@@ -1,12 +1,7 @@
 ## 网站性能优化项目
 
-你要做的是尽可能优化这个在线项目的速度。注意，请应用你之前在[网站性能优化课程](https://cn.udacity.com/course/website-performance-optimization--ud884/)中学习的技术来优化关键渲染路径并使这个页面尽可能快的渲染。
 
-开始前，请导出这个代码库并检查代码。
-
-
-
-## step up
+## 运行指南
 
 ```
 npm install
@@ -17,12 +12,18 @@ npm run serve
 // 构建
 npm run serve:dist
  
+
 // 开启ngrok服务 查看给予的url ，测试pagespeed指标 （本地文件是 pageSpeed.html)
 npm run pagespeed
+
+访问： http://localhost:3000/  开始检查
 
 
 ```
 
+[pageSpeed.html](src/pageSpeed.html)
+[pizza.html](src/pizza.html)
+[pizza - main.js](src/js/main.js)
 
 ### 指南
 

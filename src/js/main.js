@@ -12,20 +12,28 @@
  Cameron Pittman, Udacity 课程开发者
  cameron@udacity.com
  */
+
+/**-----变量初始化-----**/
 let pizzasDiv = document.getElementById('randomPizzas');
-let randomPizzaContainer = document.querySelectorAll('.randomPizzaContainer');
+let randomPizzaContainer = null;
 let movingPizzasContainer = document.getElementById('movingPizzas1');
 let movers = null;
-let pizzaSizeContainer = document.querySelector('#pizzaSize');
-let windowWidth = pizzasDiv.offsetWidth;
-let scrollTop = document.body.scrollTop
+let pizzaSizeContainer = document.getElementById('pizzaSize');
+let scrollTop = document.body.scrollTop;
+// 设定生成pizza element数量
+/**-----设定生成pizza element数量-----**/
+const randomPizzaLength = 100;
 
+const requestAnimationFrame = window.requestAnimationFrame;
+let isInRAF = false;
 /* ----perf---- */
 window.performance.mark('mark_start_generating'); // 收集timing数据
 /* ----perf---- */
 
-
-pizzasDiv.appendChild(pizzaElementGenerator(100));
+/**-----生成pizza element-----**/
+requestAnimationFrame(()=>{
+  pizzasDiv.appendChild(pizzaElementGenerator(randomPizzaLength))
+});
 
 
 /* ----perf---- */
@@ -52,22 +60,19 @@ let frame = 0;
 
 
 // 在页面滚动时运行updatePositions函数
-window.addEventListener('scroll', function () {
-  requestAnimationFrame(function () {
-    updatePositions()
-  })
-});
+window.addEventListener('scroll', onScroll);
 
 // 当页面加载时生成披萨滑窗
 document.addEventListener('DOMContentLoaded', function () {
-  let pizzaMovers = pizzaMoverGenerator(200);
+  let pizzaMovers = pizzaMoverGenerator(40);
   movingPizzasContainer.appendChild(pizzaMovers);
-  movers = document.querySelectorAll('.mover');
-  updatePositions();
+  movers = document.getElementsByClassName('mover');
+  randomPizzaContainer = document.getElementsByClassName('randomPizzaContainer');
+
+  window.resizePizzas = resizePizzas;
+  window.requestAnimationFrame(updatePositions);
 });
 
-
-// todo
 
 function pizzaElementGenerator(len) {
   let makeRandomPizza = pizzaIngredientsGenerator().makeRandomPizza;
@@ -89,8 +94,8 @@ function pizzaElementGenerator(len) {
     elem.style.width = '33.33%';
     elem.style.height = '325px';
     elem.id = id;
-    let childStr = ` <img src="distimg/pizza.png" class="img-responsive">
-      <div class="" style="65%">
+    let childStr = ` <div style="width:35%"><img src="distimg/pizza.png" class="img-responsive"></div>
+      <div class="" style="width:65%">
         <h4>${info.name}</h4>
         <ul>
         ${ulChildren()}
@@ -1273,63 +1278,91 @@ function pizzaMoverGenerator(len) {
 // 当网站中"Our Pizzas"的滑窗部分移动时调用resizePizzas(size)函数
 let resizePizzas = function (size) {
   window.performance.mark('mark_start_resize'); // User Timing API 函数
-
-  // 改变滑窗前披萨的尺寸值
-  function changeSliderLabel(size) {
-    let s = '';
+  sizeMatch(size);
+  function sizeMatch(size){
+    let slideLabel = '';
+    let pizzaNewSize = 0;
     switch (size) {
       case '1':
-        s = 'Small';
-        return;
+        slideLabel = 'Small';
+        pizzaNewSize = 25;
+        break;
       case '2':
-        s = 'Medium';
-        return;
+        slideLabel = 'Medium';
+        pizzaNewSize = 33.3;
+        break;
       case '3':
-        s = 'Large';
-        return;
+        slideLabel = 'Large';
+        pizzaNewSize = 50;
+        break;
       default:
         console.log('bug in changeSliderLabel');
     }
-    pizzaSizeContainer.innerHTML = s;
-  }
 
-  changeSliderLabel(size);
-
-  // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  function determineDx(elem, size) {
-    let oldWidth = elem.offsetWidth;
-    let oldSize = oldWidth / windowWidth;
-
-    // 将值转成百分比宽度
-    function sizeSwitcher(size) {
-      switch (size) {
-        case '1':
-          return 0.25;
-        case '2':
-          return 0.3333;
-        case '3':
-          return 0.5;
-        default:
-          console.log('bug in sizeSwitcher');
-      }
+    pizzaSizeContainer.innerHTML = slideLabel;
+    for (let i = 0; i < randomPizzaLength; i++) {
+      randomPizzaContainer[i].style.width =  pizzaNewSize + "%";
     }
-
-    let newSize = sizeSwitcher(size);
-    let dx = (newSize - oldSize) * windowWidth;
-
-    return dx;
+    console.log('resizePizzas', pizzaNewSize)
   }
+  console.log('????')
+  // // 改变滑窗前披萨的尺寸值
+  // function changeSliderLabel(size) {
+  //   let s = '';
+  //   switch (size) {
+  //     case '1':
+  //       s = 'Small';
+  //       return;
+  //     case '2':
+  //       s = 'Medium';
+  //       return;
+  //     case '3':
+  //       s = 'Large';
+  //       return;
+  //     default:
+  //       console.log('bug in changeSliderLabel');
+  //   }
+  //   pizzaSizeContainer.innerHTML = s;
+  // }
 
-  // 遍历披萨的元素并改变它们的宽度
-  function changePizzaSizes(size) {
-    for (let i = 0; i < randomPizzaContainer.length; i++) {
-      let dx = determineDx(randomPizzaContainer[i], size);
-      let newwidth = randomPizzaContainer[i].offsetWidth + dx + 'px';
-      randomPizzaContainer[i].style.width = newwidth;
-    }
-  }
+  // changeSliderLabel(size);
+  //
+  // // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
+  // function determineDx(elem, size) {
+  //   let oldWidth = elem.offsetWidth;
+  //   let oldSize = oldWidth / windowWidth;
+  //
+  //   // 将值转成百分比宽度
+  //   function sizeSwitcher(size) {
+  //     switch (size) {
+  //       case '1':
+  //         return 0.25;
+  //       case '2':
+  //         return 0.3333;
+  //       case '3':
+  //         return 0.5;
+  //       default:
+  //         console.log('bug in sizeSwitcher');
+  //     }
+  //   }
+  //
+  //   let newSize = sizeSwitcher(size);
+  //   let dx = (newSize - oldSize) * windowWidth;
+  //
+  //   return dx;
+  // }
 
-  changePizzaSizes(size);
+  // // 遍历披萨的元素并改变它们的宽度
+  // function changePizzaSizes(size) {
+  //   for (let i = 0; i < randomPizzaContainer.length; i++) {
+  //     let itemOffsetWidth = randomPizzaContainer[i].offsetWidth;
+  //     let dx = determineDx(itemOffsetWidth, size);
+  //     let newwidth = itemOffsetWidth + dx + 'px';
+  //     randomPizzaContainer[i].style.width = newwidth;
+  //   }
+  // }
+
+  // changePizzaSizes(size);
 
   // User Timing API 太棒了
   window.performance.mark('mark_end_resize');
@@ -1370,9 +1403,12 @@ function updatePositions() {
   window.performance.mark('mark_start_frame');
 
   let items = movers;
+  scrollTop = document.body.scrollTop;
+  let top = scrollTop / 1250;
   for (let i = 0; i < items.length; i++) {
-    let phase = Math.sin(scrollTop / 1250 + i % 5);
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    let phase = Math.sin(top+ i % 5);
+    // items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+    items[i].style.transform = 'translateX(' + 100 * phase + 'px)';
   }
 
   // 再次使用User Timing API。这很值得学习
@@ -1389,4 +1425,16 @@ function updatePositions() {
     );
     logAverageFrame(timesToUpdatePosition);
   }
+}
+
+function onScroll(){
+  if (!isInRAF) {
+    requestAnimationFrame(updatePositions);
+    isInRAF  = true;
+  }
+}
+
+
+window.onerror= function(e){
+  console.error(e)
 }

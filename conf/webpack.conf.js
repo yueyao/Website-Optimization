@@ -15,6 +15,18 @@ module.exports = {
           'json-loader'
         ]
       },
+      {
+        test: /\.html$/,
+        loaders: [
+          'html-loader'
+        ]
+      },
+        {
+               test: /\.(png|svg|jpg|gif)$/,
+           use: [
+             'file-loader'
+           ]
+       },
       // {
       //   test: /\.js$/,
       //   exclude: /node_modules/,
@@ -51,6 +63,21 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: conf.path.src('index.html')
     }),
+    new HtmlWebpackPlugin({
+      template: conf.path.src('pizza.html')
+    }),
+    new HtmlWebpackPlugin({
+      template: conf.path.src('pageSpeed.html')
+    }),
+    new HtmlWebpackPlugin({
+      template: conf.path.src('project-2048.html')
+    }),
+    new HtmlWebpackPlugin({
+      template: conf.path.src('project-mobile.html')
+    }),
+    new HtmlWebpackPlugin({
+      template: conf.path.src('project-webperf.html')
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: () => [autoprefixer]
@@ -64,6 +91,6 @@ module.exports = {
     filename: 'js/[name].js'
   },
   entry: {
-    pizza: './src/views/js/main.js'
+    pizza: './src/js/main.js'
   }
 };

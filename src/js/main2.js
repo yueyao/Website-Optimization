@@ -2,15 +2,20 @@
  * Created by hebo on 2017/6/25.
  */
 
-
+pizzaElementGenerator(10);
 
 function pizzaElementGenerator(len) {
   let makeRandomPizza = pizzaIngredientsGenerator().makeRandomPizza;
-  let docFragment = document.createDocumentFragment();
+  // let docFragment = document.createDocumentFragment();
+  let r = []
   for (let i = 2; i < len; i++) {
     let piz = makeRandomPizza();
-    docFragment.push(elements(`piz-${i}`, piz));
+    // docFragment.push(elements(`piz-${i}`, piz));
+    r.push(i)
   }
+  // console.log(docFragment.length)
+  console.log(r.length)
+  return;
   return docFragment;
   function elements(id, info) {
     let style = `width: 33.33%;height:325px;`;
@@ -1207,3 +1212,4 @@ function pizzaMoverGenerator() {
   }
   return docFragment;
 }
+

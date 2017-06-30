@@ -78,7 +78,7 @@ module.exports = {
     filename: '[name]-[hash].js'
   },
   entry: {
-    pizza: './src/views/js/main.js',
+    pizza: './src/js/main.js',
     vendor: Object.keys(pkg.dependencies)
   }
 };

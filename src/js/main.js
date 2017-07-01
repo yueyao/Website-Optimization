@@ -1270,6 +1270,7 @@ function pizzaMoverGenerator(len) {
     elem.style.width = '73.333px';
     elem.style.top = Math.floor(i / cols) * s + 'px';
     elem.basicLeft = i % cols * s;
+    elem.style.left = i % cols * s+ 'px';
     docFragment.appendChild(elem);
   }
   return docFragment;
@@ -1303,66 +1304,7 @@ let resizePizzas = function (size) {
     for (let i = 0; i < randomPizzaLength; i++) {
       randomPizzaContainer[i].style.width =  pizzaNewSize + "%";
     }
-    console.log('resizePizzas', pizzaNewSize)
   }
-  console.log('????')
-  // // 改变滑窗前披萨的尺寸值
-  // function changeSliderLabel(size) {
-  //   let s = '';
-  //   switch (size) {
-  //     case '1':
-  //       s = 'Small';
-  //       return;
-  //     case '2':
-  //       s = 'Medium';
-  //       return;
-  //     case '3':
-  //       s = 'Large';
-  //       return;
-  //     default:
-  //       console.log('bug in changeSliderLabel');
-  //   }
-  //   pizzaSizeContainer.innerHTML = s;
-  // }
-
-  // changeSliderLabel(size);
-  //
-  // // 返回不同的尺寸以将披萨元素由一个尺寸改成另一个尺寸。由changePizzaSlices(size)函数调用
-  // function determineDx(elem, size) {
-  //   let oldWidth = elem.offsetWidth;
-  //   let oldSize = oldWidth / windowWidth;
-  //
-  //   // 将值转成百分比宽度
-  //   function sizeSwitcher(size) {
-  //     switch (size) {
-  //       case '1':
-  //         return 0.25;
-  //       case '2':
-  //         return 0.3333;
-  //       case '3':
-  //         return 0.5;
-  //       default:
-  //         console.log('bug in sizeSwitcher');
-  //     }
-  //   }
-  //
-  //   let newSize = sizeSwitcher(size);
-  //   let dx = (newSize - oldSize) * windowWidth;
-  //
-  //   return dx;
-  // }
-
-  // // 遍历披萨的元素并改变它们的宽度
-  // function changePizzaSizes(size) {
-  //   for (let i = 0; i < randomPizzaContainer.length; i++) {
-  //     let itemOffsetWidth = randomPizzaContainer[i].offsetWidth;
-  //     let dx = determineDx(itemOffsetWidth, size);
-  //     let newwidth = itemOffsetWidth + dx + 'px';
-  //     randomPizzaContainer[i].style.width = newwidth;
-  //   }
-  // }
-
-  // changePizzaSizes(size);
 
   // User Timing API 太棒了
   window.performance.mark('mark_end_resize');
@@ -1428,10 +1370,7 @@ function updatePositions() {
 }
 
 function onScroll(){
-  if (!isInRAF) {
     requestAnimationFrame(updatePositions);
-    isInRAF  = true;
-  }
 }
 
 
